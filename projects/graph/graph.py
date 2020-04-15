@@ -90,13 +90,23 @@ class Graph:
         This should be done using recursion.
         """
         visited = set()
-        def dft_r(vertex):
-            visited.add(vertex)
-            for node in self.vertices[vertex]:
-                if node not in visited:
-                    dft_r(node)
+        # def dft_r(vertex):
+        #     visited.add(vertex)
+        #     for node in self.vertices[vertex]:
+        #         if node not in visited:
+        #             dft_r(node)
 
-        dft_r(starting_vertex)
+        # dft_r(starting_vertex)
+
+        if starting_vertex not in visited:
+            visited.add(starting_vertex)
+
+            neighbors = self.get_neighbors(starting_vertex)
+
+            for neighbor in neighbors:
+                self.dft_recursive(neighbor, visited)
+
+        return visited
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -105,22 +115,40 @@ class Graph:
         breath-first order.
         """
         q = Queue()
-        q.enqueue([starting_vertex])
+        # q.enqueue([starting_vertex])
         visited = set()
+        path = [starting_vertex]
+        q.enqueue(path)
 
-        while q.size() is not None:
+        while q.size() > 0:
             current_path = q.dequeue()
             current_node = current_path[-1]
-            visited.add(current_node)
 
             if current_node == destination_vertex:
                 return current_path
-            
-            for node in self.vertices[current_node]:
-                if node not in visited:
+
+            if current_node not in visited:
+                visited.add(current_node)
+                neighbors = self.get_neighbors(current_node)
+                for neighbor in neighbors:
                     path_copy = current_path[:]
-                    path_copy.append(node)
+                    path_copy.append(neighbor)
                     q.enqueue(path_copy)
+
+        # while q.size() is not None:
+        #     current_path = q.dequeue()
+        #     current_node = current_path[-1]
+        #     visited.add(current_node)
+
+        #     if current_node == destination_vertex:
+        #         return current_path
+            
+        #     for node in self.vertices[current_node]:
+        #         if node not in visited:
+        #             path_copy = current_path[:]
+        #             path_copy.append(node)
+        #             q.enqueue(path_copy)
+
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -128,21 +156,42 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        s = Stack()
-        s.push([starting_vertex])
-        visited = set()
+        # s = Stack()
+        # s.push([starting_vertex])
+        # visited = set()
 
-        while s.size() is not None:
+        # while s.size() is not None:
+        #     current_path = s.pop()
+        #     current_node = current_path[-1]
+        #     visited.add(current_node)
+
+        #     if current_node == destination_vertex:
+        #         return current_path
+        #     for node in self.vertices[current_node]:
+        #         if node not in visited:
+        #             path_copy = current_path[:]
+        #             path_copy.append(node)
+        #             s.push(path_copy)
+
+        s = Stack()
+        # q.enqueue([starting_vertex])
+        visited = set()
+        path = [starting_vertex]
+        s.push(path)
+
+        while s.size() > 0:
             current_path = s.pop()
             current_node = current_path[-1]
-            visited.add(current_node)
 
             if current_node == destination_vertex:
                 return current_path
-            for node in self.vertices[current_node]:
-                if node not in visited:
+
+            if current_node not in visited:
+                visited.add(current_node)
+                neighbors = self.get_neighbors(current_node)
+                for neighbor in neighbors:
                     path_copy = current_path[:]
-                    path_copy.append(node)
+                    path_copy.append(neighbor)
                     s.push(path_copy)
 
 
